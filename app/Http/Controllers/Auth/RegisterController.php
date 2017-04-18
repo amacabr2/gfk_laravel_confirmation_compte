@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\RegisteredUser;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
@@ -45,6 +46,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         event(new Registered($user = $this->create($request->all())));
+        $user->notify(new RegisteredUser());
         return redirect('/login')->with('success', 'Votre compte à bien été crée, vous devez le confirmer avec l\'email que vous allez recevoir');
     }
 

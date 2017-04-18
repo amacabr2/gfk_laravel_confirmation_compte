@@ -41,10 +41,12 @@ class RegisteredUser extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Inscription sur mon supre site")
-                    ->line('Votre compte a bien été crée mail dit être confirmé, merci de cliquer sur le lien suivant.')
-                    ->action('Confirmer mon compte', url("/confirm/{$notifiable->id}/{$notifiable->confirmation_token}"))
-                    ->line('Si vous n\'êtes pas l\'origine de cette demande vous pouvez ignorer cette demande');
+            ->success()
+            ->greeting("Bienvenue")
+            ->subject("Inscription sur mon super site")
+            ->line('Votre compte a bien été crée mail dit être confirmé, merci de cliquer sur le lien suivant.')
+            ->action('Confirmer mon compte', url("/confirm/{$notifiable->id}/{$notifiable->confirmation_token}"))
+            ->line('Si vous n\'êtes pas l\'origine de cette demande vous pouvez ignorer cette demande');
     }
 
     /**
