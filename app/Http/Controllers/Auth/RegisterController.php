@@ -50,8 +50,18 @@ class RegisterController extends Controller
         return redirect('/login')->with('success', 'Votre compte à bien été crée, vous devez le confirmer avec l\'email que vous allez recevoir');
     }
 
-    public function confirm() {
-
+    /**
+     * Confirmation de l'inscription
+     */
+    public function confirm($id, $token) {
+        $user = User::where('id', $id)->where('confirmation_token', $token)->first();
+        if ($user) {
+            $user->update(['confirmation_token' => null]);
+            $this->guard()->login($user);
+            return redirect($this->redirectPath())->with('success', 'Votre compte a bien été confirmé');
+        } else {
+            return redirect('/login')->with('error', 'Ce lien ne semble plus valide');
+        }
     }
 
     /**
@@ -81,7 +91,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'confirmation_token' => str_replace_array('/', '', bcrypt(str_random(16))),
+            'confirmation_token' => str_replace('/', '', bcrypt(str_random(16))),
         ]);
     }
 }
