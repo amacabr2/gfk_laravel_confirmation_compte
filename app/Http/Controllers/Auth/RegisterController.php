@@ -50,6 +50,10 @@ class RegisterController extends Controller
         return redirect('/login')->with('success', 'Votre compte à bien été crée, vous devez le confirmer avec l\'email que vous allez recevoir');
     }
 
+    public function confirm() {
+
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -77,7 +81,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'confirmation_token' => bcrypt(str_random(16)),
+            'confirmation_token' => str_replace_array('/', '', bcrypt(str_random(16))),
         ]);
     }
 }
