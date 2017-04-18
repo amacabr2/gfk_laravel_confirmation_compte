@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -45,7 +45,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         event(new Registered($user = $this->create($request->all())));
-        return redirect('/login')->with('succes', 'Votre compte à bien été crée, vous devez le confirmer avec l\'email que vous allez recevoir');
+        return redirect('/login')->with('success', 'Votre compte à bien été crée, vous devez le confirmer avec l\'email que vous allez recevoir');
     }
 
     /**
@@ -75,6 +75,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'confirmation_token' => bcrypt(str_random(16)),
         ]);
     }
 }
